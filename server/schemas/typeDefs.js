@@ -20,20 +20,20 @@ const typeDefs = gql`
 
   type saveBook {
     description: String!
+    authors: [String]
     title: String!
-    bookId: String
+    bookId: String!
     image: String
     link: String
-    authors: [String]
   }
 
   type Auth {
     token: ID!
-    user:User
+    user: User
   }
 
   type Query {
-    me: [User]
+    me: User
   }
 
   # Define which mutations the client is allowed to make
@@ -41,6 +41,8 @@ const typeDefs = gql`
     # Accepts an email and password as parameters; returns an Auth type
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password String!): Auth
+    saveBook(input: saveBook!) : User
+    removeBook(bookId: ID!): User
   }
 `;
 
