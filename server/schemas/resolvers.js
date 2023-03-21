@@ -15,7 +15,7 @@ const resolvers = {
     }, 
 
     Mutation: {
-        addUser: async (parent, args) => {
+        addUser: async ( parent, args ) => {
             try {
                 const user = await User.create(args);
                 const token = signToken(user);
@@ -24,8 +24,8 @@ const resolvers = {
                 console.log(error);                
             }
         },
-        login: async (parent, { email, password }) => {
-            const user = await User.findOne({ email });
+        login: async ( parent, { email, password }) => {
+            const user = await User.findOne( { email } );
 
             if (!user) {
                 throw new AuthenticationError("Invliad Username");
@@ -40,32 +40,32 @@ const resolvers = {
             return { token, user };
         },     
 
-
+        //if user logged in update users books
         saveBook: async (parent, { bookData }, context) => {
-            if (context.user) {
+            if ( context.user ) {
                 const updatedUser = await User
                     .findOneAndUpdate(
                         { _id: context.user._id }, 
                         { $addToSet: { savedBooks: bookData } },
-                        { new: true }
+                        { new: true, runValidators: true }
                     );
                 return updatedUser;
             };
             throw new AuthenticationError("Please Login");
         },
-
-        removeBook: async (parent, { book }, context) => {
+        //if user loggedin remove book
+        removeBook: async (parent, { bookId }, context) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $pull: { savedBooks: { book } } },
-                    { new: true }
+                    { $pull: { savedBooks: { bookId } } },
+                    { new: true,  runValidators: true }
                 );
                 return updatedUser;
             };
             throw new AuthenticationError("Please Login!");
-        }
-    }
+        },
+    },
 };
 
 module.exports = resolvers;

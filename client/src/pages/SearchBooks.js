@@ -11,7 +11,6 @@ import {
 import Auth from '../utils/auth';
 import {useMutation} from '@apollo/react-hooks';
 import {SAVE_BOOK} from '../utils/mutations';
-import { GET_ME } from '../utils/queries';
 import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
@@ -21,7 +20,7 @@ const SearchBooks = () => {
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
 
-  const [saveBook, {error}] = useMutation(SAVE_BOOK);
+  const [saveBook] = useMutation(SAVE_BOOK);
 
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
@@ -77,9 +76,16 @@ const SearchBooks = () => {
     }
 
     try {
-      await saveBook({variables: {...bookToSave}})
+      const  response  = await saveBook({
+        variables:  {
+          input: bookToSave
+        }
+      });
 
-      // if book successfully saves to user's account, save book id to state
+      if (! response ) {
+        throw new Error("error occoured");
+      }
+
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.error(err);
