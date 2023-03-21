@@ -9,9 +9,10 @@ import {
 } from 'react-bootstrap';
 
 import Auth from '../utils/auth';
-import useMutation from '@apollo/client';
-import SAVE_BOOK from '../utils/mutations';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import {useMutation} from '@apollo/react-hooks';
+import {SAVE_BOOK} from '../utils/mutations';
+import { GET_ME } from '../utils/queries';
+import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
 const SearchBooks = () => {
@@ -20,7 +21,7 @@ const SearchBooks = () => {
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState('');
 
-  const [saveBook] = useMutation(SAVE_BOOK);
+  const [saveBook, {error}] = useMutation(SAVE_BOOK);
 
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
@@ -76,7 +77,7 @@ const SearchBooks = () => {
     }
 
     try {
-      await saveBook({variables: {input: bookToSave}})
+      await saveBook({variables: {...bookToSave}})
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
@@ -91,7 +92,7 @@ const SearchBooks = () => {
         <Container>
           <h1>Search for Books!</h1>
           <Form onSubmit={handleFormSubmit}>
-            <Form.Row>
+            {/* <Form.Row> */}
               <Col xs={12} md={8}>
                 <Form.Control
                   name='searchInput'
@@ -107,7 +108,7 @@ const SearchBooks = () => {
                   Submit Search
                 </Button>
               </Col>
-            </Form.Row>
+            {/* </Form.Row> */}
           </Form>
         </Container>
       </div>
@@ -148,6 +149,7 @@ const SearchBooks = () => {
         </Row>
       </Container>
     </>
+
   );
 };
 
