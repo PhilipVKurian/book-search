@@ -7,7 +7,8 @@ const resolvers = {
         me: async (parent, args, context) => {
             if (context.user) {
                 const userData = await User.findOne({ _id: context.user._id })
-                .select("-__v -password").populate('books');              
+                .select("-__v -password")
+                .populate('books');              
                 return userData;
             };
             throw new AuthenticationError("Please Login!");
@@ -25,7 +26,7 @@ const resolvers = {
             }
         },
         login: async ( parent, { email, password }) => {
-            const user = await User.findOne( { email } );
+            const user = await User.findOne({ email });
 
             if (!user) {
                 throw new AuthenticationError("Invliad Username");
@@ -40,25 +41,25 @@ const resolvers = {
             return { token, user };
         },     
 
-        //if user logged in update users books
+
         saveBook: async (parent, { bookData }, context) => {
             if ( context.user ) {
                 const updatedUser = await User
                     .findOneAndUpdate(
                         { _id: context.user._id }, 
-                        { $addToSet: { savedBooks: bookData } },
-                        { new: true, runValidators: true }
+                        { $addToSet: { savedBooks: bookData }},
+                        { new: true }
                     );
                 return updatedUser;
             };
             throw new AuthenticationError("Please Login");
         },
-        //if user loggedin remove book
+
         removeBook: async (parent, { bookId }, context) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $pull: { savedBooks: { bookId } } },
+                    { $pull: { savedBooks: { bookId } }},
                     { new: true,  runValidators: true }
                 );
                 return updatedUser;

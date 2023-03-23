@@ -76,11 +76,7 @@ const SearchBooks = () => {
     }
 
     try {
-      const  response  = await saveBook({
-        variables:  {
-          input: bookToSave
-        }
-      });
+      const  response  = await saveBook({variables:  { bookData: {...bookToSave}}});
 
       if (! response ) {
         throw new Error("error occoured");
