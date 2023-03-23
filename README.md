@@ -20,10 +20,6 @@ In the project directory run the following commands
 Loggedin users can save books and delete them
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/114792819/216424896-e9d9ed50-955e-4149-a952-ccc6aa4ca8cf.png" />
-</p>
-
-<p align="center">
 <img src="https://user-images.githubusercontent.com/114792819/227087892-26a06bba-74ee-458a-a30f-f67de43a30c8.png" />
 </p>
 
